@@ -1,18 +1,16 @@
-import { Image, TouchableOpacity,FlatList,ImageBackground } from "react-native";
+import {TouchableOpacity,FlatList,ImageBackground ,Text,Image} from "react-native";
 import { TextInput } from "react-native";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet} from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
-import React, { useCallback, useEffect, useState } from "react";
-import { Ionicons } from "@expo/vector-icons";
+import React, {  useEffect, useState } from "react";
 import {useSelector ,useDispatch} from 'react-redux';
-import Redux from "../redux/redux";
-import {addItem,delItem} from '../redux/action';
-import reducer from "../redux/rootRedux";
+import {delItem} from '../redux/action';
+
 
 export default function Home({ navigation }) {
   const [country, setCountry] = useState("");
   const data_WT = useSelector((state) => state.item);
+  const dispatch_Del = useDispatch();
   const [dtFlatlist,setDtFlatlist]=useState(data_WT);
   useEffect(() =>{
     setDtFlatlist(data_WT)
@@ -47,41 +45,56 @@ export default function Home({ navigation }) {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity
+          <TouchableOpacity style={{width:60,alignItems:'center'}}
             onPress={() => {
               navigation.navigate("Screen1", { name: country });
               // dispatch(addItem(dtr))
             }}
           >
-            <EvilIcons name="search" size={24} color="black" />
+            <EvilIcons name="search" size={35} color="black" />
           </TouchableOpacity>
           <TextInput
-            style={{ color: "gray", width: "100%", height: 50 }}
-            placeholder="Tìm tên thành phố/sân bay"
+            style={{ color: "gray", width: "100%", height: 50,fontSize:20}}
+            placeholder="Nhập tên thành phố"
             onChangeText={setCountry}
           ></TextInput>
         </View>
         <FlatList
-            //style={{ backgroundColor:'#363062',width:'100%',height:125,marginTop:50,borderRadius:10}}
             data={dtFlatlist}
             renderItem={({ item }) => (
-        <TouchableOpacity style={{ backgroundColor:'#363062',width:'100%',height:125,marginTop:50,borderRadius:10}}
-         onPress={()=>{
-          navigation.navigate("Screen1",{ name: item.name });
-        }}>
-        <View style={{flexDirection: 'row'}}> 
-          <View style={{marginLeft:10}}>
-            <Text style={{ fontSize:30, fontWeight: 500, color: 'white',marginTop:20 }}>{item.name}</Text>
-     
+        <View style={{flex:1,height:125,marginTop:20,borderRadius:15,flexDirection:'row'}}>
+          <TouchableOpacity style={{ width:320,height:125,borderRadius:20}}
+        // backgroundColor:'#363062',
+           onPress={()=>{
+            navigation.navigate("Screen1",{ name: item.name });
+           }}>
+            <ImageBackground style={{flex:1}} source={{uri:'https://i.pinimg.com/originals/b6/3b/80/b63b80df688f06feb320646ab7f2f822.gif'}}>
+          <View style={{flexDirection: 'row'}}> 
+            <View style={{marginLeft:10,width:150}}>
+              <Text style={{ fontSize:30, fontWeight: 500, color: 'white',marginTop:10}}>{item.name}</Text>
+            </View>
+            <View style={{marginLeft:10,width:150,alignItems:'center'}}>
+             <Text style={{ fontSize: 50, fontWeight: 500, color: 'white'  }}>{item?.temp_c}&#176;</Text>
+            </View>
           </View>
-          <Text style={{ fontSize: 50, fontWeight: 500, color: 'white' ,marginLeft:150 }}>{item?.temp_c}&#176;</Text>
-        </View>
 
-        <View style={{flexDirection:'row',marginLeft:10}}>
-          <Text style={{ fontSize: 20, fontWeight: 500, color: 'white',marginTop:25 }}>{item?.condition}</Text>
-          <Text style={{ fontSize: 23, fontWeight: 500, color: 'white',marginTop:25 ,marginLeft:150 }}>F:{item.temp_f}&#176; W:{item.wind_mph}&#176;</Text>
-        </View>
+          <View style={{flexDirection:'row',marginLeft:10}}>
+            <View style={{flex:1}}>
+            <Text style={{ fontSize: 20, fontWeight: 500, color: 'white',marginTop:25}}>{item?.condition}</Text>
+            </View>
+            <View style={{flex:1}}>
+            <Text style={{ fontSize: 23, fontWeight: 500, color: 'white',marginTop:25 }}>F:{item.temp_f}&#176; W:{item.wind_mph}&#176;</Text>
+            </View>
+          </View>
+          </ImageBackground>
         </TouchableOpacity>
+        <TouchableOpacity style={{width:80,height:125,backgroundColor:'#D41A1A',paddingRight:"0.5%",justifyContent:'center',marginLeft:3}}
+        onPress={()=>{
+          dispatch_Del(delItem(item.name));
+        }}>
+            <Image style={{width:30,height:43,marginLeft:6}} source={require('../assets/icons/delete.png')}></Image>
+        </TouchableOpacity>
+        </View>
       )}
 
       keyExtractor={(item,index) => index}

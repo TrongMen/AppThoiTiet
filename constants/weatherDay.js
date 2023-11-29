@@ -1,0 +1,21 @@
+
+  export const weatherImagesDay = {
+    'Partly cloudy': require('../assets/images/day/day_partlycloudy.png'),
+    'Moderate rain':  require('../assets/images/day/day_moderaterain.png'),
+    'Sunny': require('../assets/images/day/sunny.png'),
+    'Overcast': require('../assets/images/overcast.png'),
+    'Cloudy': require('../assets/images/cloudd1.png'),
+    'Light rain': require('../assets/images/lightrain.png'),
+    "Light drizzle": require('../assets/images/Night_lightdrizzle.png'),
+    "Light rain shower": require('../assets/images/day/lightrainshower.png'),
+    'Moderate rain at times': require('../assets/images/morder.png'),
+    'Heavy rain at times': require('../assets/images/heavyrain.png'),
+    'Moderate or heavy freezing rain': require('../assets/images/heavyrain.png'),
+    'Moderate or heavy rain shower': require('../assets/images/heavyrain.png'),
+    'Moderate or heavy rain with thunder': require('../assets/images/heavyrain.png'),
+    'Heavy rain': require('../assets/images/heavyrain.png'),
+    'Mist': require('../assets/images/mist.png'),
+    'Patchy rain possible': require('../assets/images/day/pachy_rainpossible.png'),
+    'Patchy light drizzle':require('../assets/images/Night_lightdrizzle.png'),
+    'other':  require('../assets/images/line.png'),
+  };

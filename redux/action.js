@@ -10,33 +10,12 @@ export const addItem = (item) => ({
 });
 
 
-export const delItem = (itemId) => ({
+export const delItem = (name) => ({
   type: DEL_ITEM,
-  payload: itemId,
+  payload:{name:name,} 
 });
 
 
-  // export const addCP = (item) => {
-  //   return async (dispatch) => {
-  //     try {
-  //       const response = await axios.post(`https://api.weatherapi.com/v1/forecast.json?key=5ce75f05e28643d1965152042232011&q=${country}&days=7&aqi=no&alerts=no`, item);
-  //       dispatch(addComponent(response.data));
-  //     } catch (error) {
-  //       console.error('Lỗi', error);
-  //     }
-  //   };
-  // };
-
-  // export const deleteCP = (itemId) => {
-  //   return async (dispatch) => {
-  //     try {
-  //       await axios.delete(`${API_URL}/${itemId}`);
-  //       dispatch(deleteComponent(itemId));
-  //     } catch (error) {
-  //       console.error('Lỗi:', error);
-  //     }
-  //   };
-  // };
 
 
 
@@ -44,5 +23,3 @@ export const delItem = (itemId) => ({
 
 
 
-// export let Add =()=>({type:'create'})
-// export let Del =()=>({type:'delete'})

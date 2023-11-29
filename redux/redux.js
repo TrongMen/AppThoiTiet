@@ -15,7 +15,7 @@ function  Redux(state=init,action){
         case ADD_ITEM:
             return { ...state, item: [...state.item, action.payload],};
         case DEL_ITEM:
-            return { ...state, item:state.item.filter(item=>item.id!==action.payload)};
+            return { ...state, item:state.item.filter(item=>item.name!==action.payload.name)};
         default:
             return  state;
     }

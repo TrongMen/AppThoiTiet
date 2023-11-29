@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,10 +6,11 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  ScrollView,
   FlatList,
 } from "react-native";
-import { weatherImages } from "../constants";
+import { weatherImages } from "../constants/weatherNight";
+import { weatherImagesDay } from "../constants/weatherDay";
+import {isDaytime} from '../constants/dayTime'
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { addItem } from "../redux/action";
@@ -29,7 +30,7 @@ export default function Screen1({ route, navigation }) {
           
           `https://api.weatherapi.com/v1/forecast.json?key=5ce75f05e28643d1965152042232011&q=${country}&days=7&aqi=no&alerts=no`
         );
-        // console.log("fake 1",response.data);
+        console.log("fake 1",response.data);
         setData(response.data);
         setForecast(response.data.forecast);
       } catch (error) {
@@ -50,13 +51,13 @@ export default function Screen1({ route, navigation }) {
           condition:data.current.condition.text,
           wind_mph:data.current.wind_mph
         })
-        console.log("fake data location 12",dtr);
+        // console.log("fake data location 12",dtr);
       }
         }, 250);
        return () => clearTimeout(timeoutId);
 },[data,dtr]);
 
-  console.log("fake data dtr",dtr);
+  // console.log("fake data dtr",dtr);
   
   const name_city = data?.location?.name;
 
@@ -67,7 +68,7 @@ export default function Screen1({ route, navigation }) {
         <ImageBackground
           style={{ width: "100%", height: "100%" }}
           source={{
-            uri: "https://i.pinimg.com/originals/b6/3b/80/b63b80df688f06feb320646ab7f2f822.gif",
+            uri: "https://i.pinimg.com/originals/96/df/d4/96dfd411ab0e68f8bc1eb47e4eee8771.gif",
           }}
         >
           <View
@@ -85,22 +86,21 @@ export default function Screen1({ route, navigation }) {
             >
               <Image
                 style={{ width: 40, height: 40 }}
-                source={require("../assets/arrow.png")}
+                source={require("../assets/icons/arrow.png")}
               ></Image>
             </TouchableOpacity>
             <TouchableOpacity
               style={{ width: 48, height: 48, borderRadius: 35,marginLeft: 270 }}
               onPress={() => {
-                // console.log("fake data 2 ",dtr);
+                
                 dispatch(addItem(dtr)); 
                 navigation.goBack();
-                console.log("fake data data_Home",data_WT);
               }}
 
             >
               <Image
                 style={{ width: 40, height: 40 }}
-                source={require("../assets/add.png")}
+                source={require("../assets/icons/add.png")}
               ></Image>
             </TouchableOpacity>
           </View>
@@ -111,16 +111,17 @@ export default function Screen1({ route, navigation }) {
           </View>
           <View style={{ flex: 0.3, alignItems: "center" }}>
             <Image
-              style={{ width: "66%", height: "115%", alignItems: "center" }}
-              source={weatherImages[data?.current?.condition?.text || "other"]}
+              style={{ width: "66%", height: 256 , alignItems: "center" }}
+              source={isDaytime() ? weatherImagesDay[data?.current?.condition?.text || "other"]:weatherImages[data?.current?.condition?.text || "other"]}
+              //isDaytime() ? weatherImages.day[item?.condition?.text || "other"] : weatherImages.night[item?.condition?.text || "other"]
             ></Image>
           </View>
 
-          <View style={{ flex: 0.2, alignItems: "center" }}>
-            <Text style={{ fontSize: 50, fontWeight: "bold", color: "white" }}>
+          <View style={{ flex: 0.2, alignItems: "center",justifyContent:'flex-end' }}>
+            <Text style={{ fontSize: 32, fontWeight: "bold", color: "white" }}>
               {data?.current?.temp_c}&#176;
             </Text>
-            <Text style={{ fontSize: 40, fontStyle: "italic", color: "white" }}>
+            <Text style={{ fontSize: 22, fontStyle: "italic", color: "white" }}>
               {data?.current?.condition?.text}
             </Text>
           </View>
@@ -132,7 +133,7 @@ export default function Screen1({ route, navigation }) {
             >
               <Image
                 style={{ width: 45, height: 50 }}
-                source={require("../assets/wind.png")}
+                source={require("../assets/icons/wind.png")}
               ></Image>
               <Text
                 style={{ alignSelf: "center", fontSize: 18, color: "white" }}
@@ -144,7 +145,7 @@ export default function Screen1({ route, navigation }) {
             <View style={{ flex: 0.5, flexDirection: "row" }}>
               <Image
                 style={{ width: 37, height: 49 }}
-                source={require("../assets/water.png")}
+                source={require("../assets/icons/water.png")}
               ></Image>
               <Text
                 style={{ alignSelf: "center", fontSize: 18, color: "white" }}
@@ -156,7 +157,7 @@ export default function Screen1({ route, navigation }) {
             <View style={{ flex: 0.5, flexDirection: "row" }}>
               <Image
                 style={{ width: 38, height: 40 }}
-                source={require("../assets/sunn.png")}
+                source={require("../assets/icons/sunn.png")}
               ></Image>
               <Text
                 style={{ alignSelf: "center", fontSize: 18, color: "white" }}
@@ -169,7 +170,7 @@ export default function Screen1({ route, navigation }) {
           <View style={{ flex: 0.05, flexDirection: "row", paddingLeft: "4%" }}>
             <Image
               style={{ width: 31, height: 32, alignItems: "center" }}
-              source={require("../assets/daily.png")}
+              source={require("../assets/icons/daily.png")}
             ></Image>
             <Text style={{ alignSelf: "center", fontSize: 18, color: "white" }}>
               {" "}
@@ -178,7 +179,7 @@ export default function Screen1({ route, navigation }) {
           </View>
           <View style={{ flex: 0.02 }}></View>
           <FlatList
-            style={{ flex: 0.2, paddingLeft: "2%", borderWidth: 2 }}
+            style={{ flex: 0.19, paddingLeft: "2%", borderWidth: 2 }}
             horizontal
             data={forecast.forecastday}
           
@@ -194,9 +195,8 @@ export default function Screen1({ route, navigation }) {
                 <View style={styles.box}>
                   <Image
                     style={{ width: 60, height: 55, alignItems: "center" }}
-                    source={
-                      weatherImages[item?.day?.condition?.text || "other"]
-                    }
+                    source={isDaytime() ?weatherImagesDay[item?.day?.condition?.text || "other"]:weatherImages[item?.day?.condition?.text || "other"] }
+                     //isDaytime() ? weatherImages.day[item?.condition?.text || "other"] : weatherImages.night[item?.condition?.text || "other"]
                   ></Image>
                   <Text
                     style={{

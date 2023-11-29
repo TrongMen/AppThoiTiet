@@ -1,5 +1,3 @@
-
-import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,66 +5,81 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
-  ScrollView,
   FlatList,
 } from "react-native";
-import { debounce } from "lodash";
-import { weatherImages } from "../constants";
+import { weatherImages } from "../constants/weatherNight";
+import { weatherImagesDay } from "../constants/weatherDay";
+import { isDaytime } from "../constants/dayTime";
 
-import axios from "axios";
 export default function Screen2({ route, navigation }) {
-
-  // const country = route.params.name;
   const data = route.params.data;
   const city = route.params.name;
   console.log("forecastday: ", data);
-  
+
+
+
+  function parseHourAsInt(hourItem) {
+    const hoursAsInt = parseInt(hourItem.slice(10, 13));
+    if (hoursAsInt >= 6 && hoursAsInt <= 18) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   return (
     <View style={styles.container}>
-      {/* <View style={{flex:1}}> */}
-      <ImageBackground style={{flex:1}}
-        source={{uri: "https://i.pinimg.com/originals/b6/3b/80/b63b80df688f06feb320646ab7f2f822.gif"}}>
-      {/* <View style={{ flex: 1 }}> */}
-        {/* <View style={{flex:0.5}}> */}
-          <View style={{height: 50,paddingLeft: "4%", paddingTop: "2%" }}>
-            <TouchableOpacity style={{width:48,height:48,borderRadius:35}}
-             onPress={() => navigation.goBack()}>
-              {/* onPress={()=>navigation.goBack()} */}
-              <Image
-                style={{ width: 40, height: 40 }}
-                source={require("../assets/arrow.png")}
-              ></Image>
-            </TouchableOpacity>
-          </View>
-          <View style={{height:60, alignItems: "center" }}>
-            <Text style={{ fontSize: 40, fontWeight: "bold", color: "white" }}>
-              {city}
-            </Text>
-          </View>
-          <View style={{ height:220, alignItems: "center" }}>
+      <ImageBackground
+        style={{ flex: 1 }}
+        source={{
+          uri: "	https://i.pinimg.com/originals/96/df/d4/96dfd411ab0e68f8bc1eb47e4eee8771.gif",
+        }}
+      >
+        <View style={{ height: 50, paddingLeft: "4%", paddingTop: "2%" }}>
+          <TouchableOpacity
+            style={{ width: 48, height: 48, borderRadius: 35 }}
+            onPress={() => navigation.goBack()}
+          >
             <Image
-              style={{ width: "66%", height: 200, alignItems: "center" }}
-              source={weatherImages[data?.day?.condition?.text || "other"]}
+              style={{ width: 40, height: 40 }}
+              source={require("../assets/icons/arrow.png")}
             ></Image>
-            {/* require('../assets/Cloud.png') */}
-          </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{ height: 60, alignItems: "center" }}>
+          <Text style={{ fontSize: 40, fontWeight: "bold", color: "white" }}>
+            {city}
+          </Text>
+        </View>
+        <View style={{ height: 220, alignItems: "center" }}>
+          <Image
+            style={{ width: "66%", height: 256, alignItems: "center" }}
+            source={
+              isDaytime()
+                ? weatherImagesDay[data?.day?.condition?.text || "other"]
+                : weatherImages[data?.day?.condition?.text || "other"]
+            }
+          ></Image>
+        </View>
 
-          <View style={{height:100, alignItems: "center" }}>
-            <Text style={{ fontSize: 46, fontWeight: "bold", color: "white" }}>
-              {data?.day.avgtemp_c}&#176;
-            </Text>
-            <Text style={{ fontSize: 30, fontStyle: "italic", color: "white" }}>
-              {data?.date}
-            </Text>
-          </View>
-          <View style={{flex:0.02}}></View>
-        {/* </View> */}
-        <View style={{height:260,borderWidth: 1,borderRadius: 10}}>
-        {/* ,marginBottom: 10 */}
+        <View
+          style={{
+            height: 100,
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Text style={{ fontSize: 32, fontWeight: "bold", color: "white" }}>
+            {data?.day.avgtemp_c}&#176;
+          </Text>
+          <Text style={{ fontSize: 22, fontStyle: "italic", color: "white" }}>
+            {data?.date}
+          </Text>
+        </View>
+        <View style={{ flex: 0.02 }}></View>
+        <View style={{ height: 260, borderWidth: 1, borderRadius: 10 }}>
           <FlatList
-            style={{flex:1, borderWidth: 3, borderRadius: 10 }}
-            
+            style={{ flex: 1, borderWidth: 3, borderRadius: 10 }}
             data={data.hour}
             renderItem={({ item }) => (
               <View style={styles.box}>
@@ -75,17 +88,24 @@ export default function Screen2({ route, navigation }) {
                     alignSelf: "center",
                     fontSize: 18,
                     color: "white",
-                    // marginBottom: 20,
-                    justifyContent:'center'
+                    justifyContent: "center",
                   }}
                 >
                   {" "}
                   {item.time}
                 </Text>
-                <Image
-                  style={{ width: 60, height: 55, alignItems: "center" }}
-                  source={weatherImages[item?.condition?.text || "other"]}
-                ></Image>
+                {parseHourAsInt(item.time) ? (
+                  <Image
+                    style={{ width: 60, height: 55, alignItems: "center" }}
+                    source={weatherImagesDay[item?.condition?.text || "other"]}
+                  ></Image>
+                ) : (
+                  <Image
+                    style={{ width: 60, height: 55, alignItems: "center" }}
+                    source={weatherImages[item?.condition?.text || "other"]}
+                  ></Image>
+                )}
+                
 
                 <Text
                   style={{
@@ -99,12 +119,10 @@ export default function Screen2({ route, navigation }) {
                 </Text>
               </View>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => index}
           />
         </View>
-      {/* </View> */}
       </ImageBackground>
-      {/* </View> */}
     </View>
   );
 }
