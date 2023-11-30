@@ -15,9 +15,6 @@ export default function Screen2({ route, navigation }) {
   const data = route.params.data;
   const city = route.params.name;
   console.log("forecastday: ", data);
-
-
-
   function parseHourAsInt(hourItem) {
     const hoursAsInt = parseInt(hourItem.slice(10, 13));
     if (hoursAsInt >= 6 && hoursAsInt <= 18) {
@@ -135,8 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "88%",
     height: "auto",
-    // backgroundColor: 'rgba(255, 255, 255, 0.5)' ,
-    //'rgba(255, 255, 255, 0.5)'
     margin: 10,
     borderRadius: 10,
     justifyContent: "space-between",

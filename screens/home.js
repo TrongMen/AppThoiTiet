@@ -48,7 +48,6 @@ export default function Home({ navigation }) {
           <TouchableOpacity style={{width:60,alignItems:'center'}}
             onPress={() => {
               navigation.navigate("Screen1", { name: country });
-              // dispatch(addItem(dtr))
             }}
           >
             <EvilIcons name="search" size={35} color="black" />
@@ -64,7 +63,6 @@ export default function Home({ navigation }) {
             renderItem={({ item }) => (
         <View style={{flex:1,height:125,marginTop:20,borderRadius:15,flexDirection:'row'}}>
           <TouchableOpacity style={{ width:320,height:125,borderRadius:20}}
-        // backgroundColor:'#363062',
            onPress={()=>{
             navigation.navigate("Screen1",{ name: item.name });
            }}>
@@ -106,10 +104,6 @@ export default function Home({ navigation }) {
   );
   
 }
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {

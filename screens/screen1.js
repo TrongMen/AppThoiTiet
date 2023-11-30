@@ -22,6 +22,14 @@ export default function Screen1({ route, navigation }) {
   const dispatch = useDispatch();
   const data_WT = useSelector((state) => state.item);
   const [dtr,setDtr]=useState({});
+  function parseHourAsInt(hourItem) {
+    const hoursAsInt = parseInt(hourItem.slice(10, 13));
+    if (hoursAsInt >= 6 && hoursAsInt <= 18) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   useEffect(() => {
     const getWeather = async () => {
@@ -51,17 +59,17 @@ export default function Screen1({ route, navigation }) {
           condition:data.current.condition.text,
           wind_mph:data.current.wind_mph
         })
-        // console.log("fake data location 12",dtr);
+        
       }
-        }, 250);
+        }, 10);
        return () => clearTimeout(timeoutId);
 },[data,dtr]);
 
-  // console.log("fake data dtr",dtr);
+  
   
   const name_city = data?.location?.name;
 
-  // console.log(name_city);
+ 
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
@@ -110,10 +118,10 @@ export default function Screen1({ route, navigation }) {
             </Text>
           </View>
           <View style={{ flex: 0.3, alignItems: "center" }}>
+         
             <Image
               style={{ width: "66%", height: 256 , alignItems: "center" }}
               source={isDaytime() ? weatherImagesDay[data?.current?.condition?.text || "other"]:weatherImages[data?.current?.condition?.text || "other"]}
-              //isDaytime() ? weatherImages.day[item?.condition?.text || "other"] : weatherImages.night[item?.condition?.text || "other"]
             ></Image>
           </View>
 
@@ -196,7 +204,6 @@ export default function Screen1({ route, navigation }) {
                   <Image
                     style={{ width: 60, height: 55, alignItems: "center" }}
                     source={isDaytime() ?weatherImagesDay[item?.day?.condition?.text || "other"]:weatherImages[item?.day?.condition?.text || "other"] }
-                     //isDaytime() ? weatherImages.day[item?.condition?.text || "other"] : weatherImages.night[item?.condition?.text || "other"]
                   ></Image>
                   <Text
                     style={{
